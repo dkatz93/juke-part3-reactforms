@@ -11,6 +11,8 @@ import Player from '../components/Player';
 
 import { convertAlbum, convertAlbums, convertSong, skip, convertPlaylist, convertPlaylists } from '../utils';
 
+import { browserHistory } from 'react-router'
+
 export default class AppContainer extends Component {
 
   constructor (props) {
@@ -24,7 +26,6 @@ export default class AppContainer extends Component {
     this.selectAlbum = this.selectAlbum.bind(this);
     this.selectArtist = this.selectArtist.bind(this);
     this.selectPlaylist = this.selectPlaylist.bind(this);
-    this.selectPlaylists = this.selectPlaylists.bind(this);
   }
 
   componentDidMount () {
@@ -123,8 +124,14 @@ export default class AppContainer extends Component {
     axios.get(`/api/playlists/${playlistId}`)
       .then(res => res.data)
       .then(playlist => this.setState({
-        selectedPlaylist: convertPlaylist(playlist)
+        selectedPlaylist: this.onLoadPlaylist(playlist)
       }));
+  }
+
+  onLoadPlaylist (playlist) {
+    playlist = convertPlaylist(playlist);
+    this.setState({ selectedPlaylist: playlist });
+    return playlist;
   }
 
   onLoadArtist (artist, albums, songs) {
@@ -137,14 +144,17 @@ export default class AppContainer extends Component {
   }
 
   addPlaylist(playlistName){
-    axios.post('/api/playlists',{ name: playlistName })
+    return axios.post('/api/playlists',{ name: playlistName })
       .then(res => res.data)
       .then(playlist => {
         this.setState({
-          playlists:[...this.state.playlists,playlist]
+          playlists:[...this.state.playlists,playlist],
+          selectedPlaylist: playlist
         })
-
-      });
+        //const path = `/#/playlists/${playlist.id}`;
+        //browserHistory.push(path)
+        return browserHistory.push(`/albums`)
+      })
   }
 
   render () {
@@ -154,7 +164,8 @@ export default class AppContainer extends Component {
       toggle: this.toggle,
       selectAlbum: this.selectAlbum,
       selectArtist: this.selectArtist,
-      addPlaylist: this.addPlaylist.bind(this)
+      addPlaylist: this.addPlaylist.bind(this),
+      selectPlaylist: this.selectPlaylist.bind(this)
     });
 
     return (

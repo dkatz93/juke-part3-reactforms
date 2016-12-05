@@ -13,6 +13,7 @@ export const convertAlbums = (albums) =>
   albums.map(album => convertAlbum(album));
 
 export const convertPlaylist = (playlist) => {
+  playlist.url = `api/playlists/${playlist.id}`
   playlist.songs = playlist.songs.map(convertSong);
   return playlist;
 };

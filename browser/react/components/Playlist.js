@@ -1,8 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router';
+import Songs from './Songs'
 
 class Playlist extends React.Component {
+	constructor(props){
+		super(props)
+	}
 
+	componentWillReceiveProps (nextProps) {
+	    const nextPlaylistId = nextProps.routeParams.playlistId;
+	    const currentPlaylistId = this.props.routeParams.playlistId;
+	    const selectPlaylist = this.props.selectPlaylist;
+	    if (nextPlaylistId !== currentPlaylistId)
+	      selectPlaylist(nextPlaylistId);
+	}
 	componentDidMount () {
 	  const playlistId = this.props.routeParams.playlistId;
 	  const selectPlaylist = this.props.selectPlaylist;
@@ -10,7 +21,7 @@ class Playlist extends React.Component {
 	 }
 
 	render() {
-		const playlist = props.playlist;
+		const playlist = this.props.selectedPlaylist;
 
 		return (
 			<div>

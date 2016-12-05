@@ -1,6 +1,7 @@
 import React from 'react';
 import NewPlaylist from '../components/NewPlaylist';
 import axios from 'axios'
+import { browserHistory } from 'react-router'
 
 
 
@@ -15,6 +16,13 @@ class NewPlaylistContainer extends React.Component{
 			emptyInput : false
 		}
 	}
+
+	componentWillReceiveProps (nextProps) { 
+		const nextPlaylistId = nextProps.routeParams.playlistId;
+	    const currentPlaylistId = this.props.routeParams.playlistId;
+	    const selectPlaylist = this.props.selectPlaylist;
+	    if (nextPlaylistId !== currentPlaylistId) selectPlaylist(nextPlaylistId);
+  	}
 
 	handleChange (evt) {
 	  const value = evt.target.value;
@@ -44,11 +52,16 @@ class NewPlaylistContainer extends React.Component{
 	}
 
 	handleSubmit (evt){
+		//evt.preventDefault();
 		this.props.addPlaylist(this.state.inputValue);
+
 		this.setState({
 			inputValue: ''
 		})
+		// let playlist = this.props.selectedPlaylist
+		// const path = `/api/playlists/${playlist.id}`;
 
+		//browserHistory.push("/albums")
 	}
 
 	render(){

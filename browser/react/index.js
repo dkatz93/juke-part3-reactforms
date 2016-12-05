@@ -18,9 +18,8 @@ ReactDOM.render(
       <Route path="/albums" component={Albums} />
       <Route path="/albums/:albumId" component={Album} />
       <Route path="/artists" component={FilterableArtistsContainer} />
-      <Route path="/playlists" component={NewPlaylistContainer}>
-        <Route path='/playlist/:playlistId' component={Playlist}/>
-      </Route>
+      <Route path="/playlists" component={NewPlaylistContainer} />
+      <Route path='/playlists/:playlistId' component={Playlist}/>
       <Route path="/artists/:artistId" component={Artist}>
         <Route path="/artists/:artistId/albums" component={Albums} />
         <Route path="/artists/:artistId/songs" component={Songs} />
